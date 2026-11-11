@@ -20,11 +20,3 @@ protocol ReminderScheduling: AnyObject {
     /// 品目の通知を取り消す。
     func cancel(itemID: UUID)
 }
-
-/// 何もしない実装（プレビュー用）。
-final class NoopReminderScheduler: ReminderScheduling {
-    func requestAuthorizationIfNeeded() {}
-    func reschedule(_ source: ReminderSource) {}
-    func rescheduleAll(_ sources: [ReminderSource]) {}
-    func cancel(itemID: UUID) {}
-}

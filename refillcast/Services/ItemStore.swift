@@ -78,7 +78,12 @@ final class ItemStore {
     }
 
     func reminderSources() -> [ReminderSource] {
-        items.map(reminderSource(for:))
+        items.map { reminderSource(for: $0) }
+    }
+
+    /// すべての品目の通知を予約し直す（設定の変更時やアプリが前面に戻ったとき）。
+    func rescheduleAllReminders() {
+        reminders.rescheduleAll(reminderSources())
     }
 
     func clearError() {

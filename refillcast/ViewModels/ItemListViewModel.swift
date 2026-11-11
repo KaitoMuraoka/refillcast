@@ -4,10 +4,12 @@ import Observation
 /// 一覧画面から開くシート。
 enum ItemListSheet: Identifiable {
     case itemForm(ItemFormViewModel)
+    case settings(SettingsViewModel)
 
     var id: ObjectIdentifier {
         switch self {
         case .itemForm(let viewModel): ObjectIdentifier(viewModel)
+        case .settings(let viewModel): ObjectIdentifier(viewModel)
         }
     }
 }
@@ -31,10 +33,12 @@ final class ItemListViewModel {
     private(set) var pendingDeletion: ItemRowModel?
 
     @ObservationIgnored let store: ItemStore
+    @ObservationIgnored private let settingsViewModel: SettingsViewModel?
     @ObservationIgnored private var undoDismissTask: Task<Void, Never>?
 
-    init(store: ItemStore) {
+    init(store: ItemStore, settingsViewModel: SettingsViewModel? = nil) {
         self.store = store
+        self.settingsViewModel = settingsViewModel
     }
 
     // MARK: - 表示
@@ -60,8 +64,22 @@ final class ItemListViewModel {
 
     // MARK: - 画面の出来事
 
+    /// アプリが前面に来たとき。「今日」を更新し、通知を予約し直す
+    /// （設定アプリで通知を許可して戻ってきた場合にも予約されるようにする）。
     func sceneDidBecomeActive() {
         store.refreshToday()
+        store.rescheduleAllReminders()
+    }
+
+    // MARK: - 設定
+
+    var canShowSettings: Bool {
+        settingsViewModel != nil
+    }
+
+    func presentSettings() {
+        guard let settingsViewModel else { return }
+        activeSheet = .settings(settingsViewModel)
     }
 
     // MARK: - 登録

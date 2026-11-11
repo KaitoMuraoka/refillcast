@@ -33,6 +33,13 @@ struct ItemListView: View {
                 ItemDetailView(viewModel: viewModel.makeDetailViewModel(for: itemID))
             }
             .toolbar {
+                if viewModel.canShowSettings {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button("設定", systemImage: "gearshape") {
+                            viewModel.presentSettings()
+                        }
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("品目を追加", systemImage: "plus") {
                         viewModel.presentNewItemForm()
@@ -54,6 +61,8 @@ struct ItemListView: View {
                 switch sheet {
                 case .itemForm(let formViewModel):
                     ItemFormView(viewModel: formViewModel)
+                case .settings(let settingsViewModel):
+                    SettingsView(viewModel: settingsViewModel)
                 }
             }
             .confirmationDialog(
@@ -71,7 +80,7 @@ struct ItemListView: View {
                 Text("購入履歴もすべて削除されます。")
             }
         }
-        .onChange(of: scenePhase) { _, newPhase in
+        .onChange(of: scenePhase, initial: true) { _, newPhase in
             if newPhase == .active {
                 viewModel.sceneDidBecomeActive()
             }

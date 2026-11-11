@@ -3,7 +3,10 @@ import SwiftData
 
 extension AppDependencies {
     /// プレビュー用の構成。端末には保存せず、通知も予約しない。
-    static func preview(withSampleData: Bool = true) -> AppDependencies {
+    static func preview(
+        withSampleData: Bool = true,
+        notificationStatus: NotificationAuthorization = .authorized
+    ) -> AppDependencies {
         let container: ModelContainer
         do {
             container = try ModelContainerFactory.make(inMemory: true)
@@ -14,7 +17,11 @@ extension AppDependencies {
             PreviewSampleData.insert(into: container.mainContext)
             try? container.mainContext.save()
         }
-        return AppDependencies(container: container, reminders: NoopReminderScheduler())
+        return AppDependencies(
+            container: container,
+            notificationClient: PreviewNotificationClient(status: notificationStatus),
+            defaults: UserDefaults(suiteName: "preview") ?? .standard
+        )
     }
 }
 
