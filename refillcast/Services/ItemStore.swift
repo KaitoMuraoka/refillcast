@@ -53,6 +53,12 @@ final class ItemStore {
         today = now()
     }
 
+    /// 今日の終わり。購入日に未来の日付を選べないようにするための上限。
+    var endOfToday: Date {
+        let startOfTomorrow = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: today))
+        return startOfTomorrow?.addingTimeInterval(-1) ?? today
+    }
+
     func item(withID id: UUID) -> Item? {
         items.first { $0.uuid == id }
     }

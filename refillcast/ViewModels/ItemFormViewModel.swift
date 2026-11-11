@@ -91,9 +91,7 @@ final class ItemFormViewModel: Identifiable {
 
     /// 購入日に選べる最後の日時（今日の終わり）。未来の日付は選べない。
     var latestSelectablePurchaseDate: Date {
-        let calendar = store.calendar
-        let startOfTomorrow = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: store.today))
-        return startOfTomorrow?.addingTimeInterval(-1) ?? store.today
+        store.endOfToday
     }
 
     var canSave: Bool {

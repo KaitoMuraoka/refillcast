@@ -13,9 +13,11 @@ struct ItemListView: View {
         NavigationStack {
             List {
                 ForEach(viewModel.rows) { row in
-                    ItemRow(row: row) {
-                        withAnimation {
-                            viewModel.markPurchased(row.id)
+                    NavigationLink(value: row.id) {
+                        ItemRow(row: row) {
+                            withAnimation {
+                                viewModel.markPurchased(row.id)
+                            }
                         }
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
@@ -27,6 +29,9 @@ struct ItemListView: View {
                 }
             }
             .navigationTitle("買い替え予報")
+            .navigationDestination(for: UUID.self) { itemID in
+                ItemDetailView(viewModel: viewModel.makeDetailViewModel(for: itemID))
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("品目を追加", systemImage: "plus") {

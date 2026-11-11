@@ -70,6 +70,12 @@ final class ItemListViewModel {
         activeSheet = .itemForm(ItemFormViewModel(store: store, mode: .create))
     }
 
+    // MARK: - 詳細
+
+    func makeDetailViewModel(for itemID: UUID) -> ItemDetailViewModel {
+        ItemDetailViewModel(itemID: itemID, store: store)
+    }
+
     // MARK: - 買った
 
     func markPurchased(_ itemID: UUID) {
