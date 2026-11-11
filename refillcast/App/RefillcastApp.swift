@@ -1,16 +1,14 @@
-import SwiftData
 import SwiftUI
 
 @main
 struct RefillcastApp: App {
-    private let launchState = AppLaunchState.make()
+    @State private var launchState = AppLaunchState.make()
 
     var body: some Scene {
         WindowGroup {
             switch launchState {
-            case .ready(let container):
-                RootView()
-                    .modelContainer(container)
+            case .ready(let dependencies):
+                ItemListView(viewModel: dependencies.itemListViewModel)
             case .failed:
                 StorageErrorView()
             }
