@@ -16,6 +16,11 @@ struct ItemFormView: View {
                 memoSection
             }
             .scrollDismissesKeyboard(.interactively)
+            .alert("エラー", isPresented: $viewModel.isErrorPresented) {
+                Button("OK") {}
+            } message: {
+                Text(viewModel.errorMessage)
+            }
             .navigationTitle(viewModel.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

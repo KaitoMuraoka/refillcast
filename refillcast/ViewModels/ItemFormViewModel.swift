@@ -94,6 +94,15 @@ final class ItemFormViewModel: Identifiable {
         store.endOfToday
     }
 
+    var errorMessage: String {
+        store.errorMessage ?? ""
+    }
+
+    var isErrorPresented: Bool {
+        get { store.errorMessage != nil }
+        set { if !newValue { store.clearError() } }
+    }
+
     var canSave: Bool {
         draft.isValid
     }

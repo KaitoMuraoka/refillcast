@@ -57,3 +57,17 @@ struct ItemListViewModelTests {
         #expect(viewModel.rows.isEmpty)
     }
 }
+
+@MainActor
+struct ItemListEmptyStateTests {
+    @Test func emptyUntilFirstItem() throws {
+        let fixture = try StoreFixture()
+        let viewModel = ItemListViewModel(store: fixture.store)
+        #expect(viewModel.isEmpty)
+        #expect(!viewModel.isErrorPresented)
+
+        fixture.store.addItem(fixture.draft("歯ブラシ"))
+
+        #expect(!viewModel.isEmpty)
+    }
+}

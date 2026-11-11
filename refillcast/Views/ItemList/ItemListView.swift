@@ -28,6 +28,13 @@ struct ItemListView: View {
                     }
                 }
             }
+            .overlay {
+                if viewModel.isEmpty {
+                    EmptyItemsView {
+                        viewModel.presentNewItemForm()
+                    }
+                }
+            }
             .navigationTitle("買い替え予報")
             .navigationDestination(for: UUID.self) { itemID in
                 ItemDetailView(viewModel: viewModel.makeDetailViewModel(for: itemID))
@@ -79,6 +86,11 @@ struct ItemListView: View {
             } message: { _ in
                 Text("購入履歴もすべて削除されます。")
             }
+            .alert("エラー", isPresented: $viewModel.isErrorPresented) {
+                Button("OK") {}
+            } message: {
+                Text(viewModel.errorMessage)
+            }
         }
         .onChange(of: scenePhase, initial: true) { _, newPhase in
             if newPhase == .active {
@@ -88,6 +100,14 @@ struct ItemListView: View {
     }
 }
 
-#Preview {
+#Preview("一覧") {
+    ItemListView(viewModel: AppDependencies.preview().itemListViewModel)
+}
+
+#Preview("空の状態") {
+    ItemListView(viewModel: AppDependencies.preview(withSampleData: false).itemListViewModel)
+}
+
+#Preview("横向き", traits: .landscapeLeft) {
     ItemListView(viewModel: AppDependencies.preview().itemListViewModel)
 }

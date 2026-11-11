@@ -82,6 +82,17 @@ final class ItemDetailViewModel {
         store.endOfToday
     }
 
+    // MARK: - エラー
+
+    var errorMessage: String {
+        store.errorMessage ?? ""
+    }
+
+    var isErrorPresented: Bool {
+        get { store.errorMessage != nil }
+        set { if !newValue { store.clearError() } }
+    }
+
     // MARK: - 操作
 
     func startEditing() {

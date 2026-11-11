@@ -33,6 +33,11 @@ struct ItemDetailView: View {
         .sheet(isPresented: $viewModel.isAddingPurchase) {
             AddPurchaseSheet(viewModel: viewModel)
         }
+        .alert("エラー", isPresented: $viewModel.isErrorPresented) {
+            Button("OK") {}
+        } message: {
+            Text(viewModel.errorMessage)
+        }
     }
 
     private var content: some View {

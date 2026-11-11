@@ -62,6 +62,22 @@ final class ItemListViewModel {
         }
     }
 
+    /// 品目が 1 件もない。
+    var isEmpty: Bool {
+        store.items.isEmpty
+    }
+
+    // MARK: - エラー
+
+    var errorMessage: String {
+        store.errorMessage ?? ""
+    }
+
+    var isErrorPresented: Bool {
+        get { store.errorMessage != nil }
+        set { if !newValue { store.clearError() } }
+    }
+
     // MARK: - 画面の出来事
 
     /// アプリが前面に来たとき。「今日」を更新し、通知を予約し直す
